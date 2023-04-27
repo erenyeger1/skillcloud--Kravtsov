@@ -4,8 +4,8 @@
      vaulted_password2: dHy6sKGHsk2T
      vaulted_password3: oP92ugMSaCbe
    tasks: 
-#     - name: dnf update
-#       command: dnf install epel-release -y
+     - name: dnf update
+       command: dnf install epel-release -y
      - name: install ufw
        dnf: pkg=ufw state=latest 
      - name: install curl
@@ -56,10 +56,10 @@
         password: "{{ vaulted_password3 | password_hash('sha512') }}"
      - name: install docker
        dnf: pkg=docker state=latest
-#     - name: use script
-#       script: /root/prof-skillcloud-main/docker-compose.sh
-#     - name: new directory for nginx
-#       command: mkdir /etc/profcloud-nginx
+     - name: use script
+       script: /root/prof-skillcloud-main/docker-compose.sh
+     - name: new directory for nginx
+       command: mkdir /etc/profcloud-nginx
      - name: copy files for nginx
        copy:
          src: /root/prof-skillcloud-main/nginx.conf
@@ -82,9 +82,9 @@
          dest: /etc/profcloud-nginx/Dockerfile-balance
      - name: restart sshd
        command: systemctl restart sshd
-# - hosts: newservers
-#   tasks:
-#     - name: restart ufw
-#       command: systemctl restart ufw
-#     - name: reboot
-#       command: reboot
+ - hosts: newservers
+   tasks:
+     - name: restart ufw
+       command: systemctl restart ufw
+     - name: reboot
+       command: reboot
