@@ -74,10 +74,6 @@
          dest: /etc/profcloud-nginx/index.html
      - name: copy files for nginx
        copy:
-         src: /root/prof-skillcloud-main/nginx.conf
-         dest: /etc/profcloud-nginx/nginx.conf
-     - name: copy files for nginx
-       copy:
          src: /root/prof-skillcloud-main/Dockerfile-site
          dest: /etc/profcloud-nginx/Dockerfile-site
      - name: copy files for nginx
