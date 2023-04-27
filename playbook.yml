@@ -87,4 +87,4 @@
      - name: restart ufw
        command: systemctl restart ufw
      - name: reboot
-       command: reboot
+       reboot: 
