@@ -1,0 +1,8 @@
+[servers]
+Project_1
+Project_2
+Project_3
+#[newservers]
+#Project_1 ansible_port=2233
+#Project_2 ansible_port=2233
+#Project_3 ansible_port=2233

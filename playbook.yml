@@ -1,0 +1,90 @@
+ - hosts: servers 
+   vars:
+     vaulted_password1: S52we9V6QTp7
+     vaulted_password2: dHy6sKGHsk2T
+     vaulted_password3: oP92ugMSaCbe
+   tasks: 
+#     - name: dnf update
+#       command: dnf install epel-release -y
+     - name: install ufw
+       dnf: pkg=ufw state=latest 
+     - name: install curl
+       dnf: pkg=curl state=latest
+     - name: ufw activate
+       command: systemctl start ufw
+     - name: activate port 8080 from ufw
+       ufw:
+        rule: allow
+        port: 8080
+     - name: activate port 80 from ufw
+       ufw:
+        rule: allow
+        port: 80
+     - name: activate port 2233 from ufw
+       ufw:
+        rule: allow
+        port: 2233
+     - name: change port for ssh
+       lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: '^#Port 22'
+        insertafter: BOF
+        line: Port 2233
+     - name: activate PubKey authentication  
+       lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: ''
+        insertafter: EOF
+        line: PubkeyAuthentication yes
+     - name: add Webdeveloper user
+       user:
+        name: Webdeveloper
+        group: root
+        shell: /bin/bash
+        password: "{{ vaulted_password1 | password_hash('sha512') }}"
+     - name: add Devopsengineer user
+       user:
+        name: Devopsengineer
+        group: root
+        shell: /bin/bash
+        password: "{{ vaulted_password2 | password_hash('sha512') }}"
+     - name: add Projectmanager user
+       user:
+        name: Projectmanager
+        group: root
+        shell: /bin/bash
+        password: "{{ vaulted_password3 | password_hash('sha512') }}"
+     - name: install docker
+       dnf: pkg=docker state=latest
+#     - name: use script
+#       script: /root/prof-skillcloud-main/docker-compose.sh
+#     - name: new directory for nginx
+#       command: mkdir /etc/profcloud-nginx
+     - name: copy files for nginx
+       copy:
+         src: /root/prof-skillcloud-main/nginx.conf
+         dest: /etc/profcloud-nginx/nginx.conf
+     - name: copy files for nginx
+       copy:
+         src: /root/prof-skillcloud-main/index.html
+         dest: /etc/profcloud-nginx/index.html
+     - name: copy files for nginx
+       copy:
+         src: /root/prof-skillcloud-main/nginx.conf
+         dest: /etc/profcloud-nginx/nginx.conf
+     - name: copy files for nginx
+       copy:
+         src: /root/prof-skillcloud-main/Dockerfile-site
+         dest: /etc/profcloud-nginx/Dockerfile-site
+     - name: copy files for nginx
+       copy:
+         src: /root/prof-skillcloud-main/Dockerfile-balance
+         dest: /etc/profcloud-nginx/Dockerfile-balance
+     - name: restart sshd
+       command: systemctl restart sshd
+# - hosts: newservers
+#   tasks:
+#     - name: restart ufw
+#       command: systemctl restart ufw
+#     - name: reboot
+#       command: reboot
